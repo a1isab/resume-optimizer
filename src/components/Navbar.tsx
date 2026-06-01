@@ -120,7 +120,9 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-border/40 px-4 py-4 md:hidden">
+        <div
+          className="border-t border-border/40 px-4 py-4 md:hidden animate-in fade-in slide-in-from-top-2 duration-200"
+        >
           <nav className="flex flex-col gap-3">
             <Link
               href="/"

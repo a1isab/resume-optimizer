@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { APP_NAME, PRO_PRICE } from "@/lib/constants";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 
 const freeFeatures = [
   "3 scans per month",
@@ -75,7 +75,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-20">
+    <div className="mx-auto max-w-4xl px-4 py-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-12 text-center">
         <h1 className="text-3xl font-bold tracking-tight">Pricing</h1>
         <p className="mt-2 text-muted-foreground">
@@ -84,7 +84,7 @@ export default function PricingPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-        <Card>
+        <Card className="transition-all duration-300 hover:border-primary/30 hover:shadow-sm hover:-translate-y-0.5">
           <CardHeader>
             <CardTitle>Free</CardTitle>
             <CardDescription>For getting started</CardDescription>
@@ -117,7 +117,7 @@ export default function PricingPage() {
           </CardFooter>
         </Card>
 
-        <Card className="border-primary/30 bg-primary/[0.03]">
+        <Card className="border-primary/30 bg-primary/[0.03] transition-all duration-300 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Pro</CardTitle>
@@ -152,7 +152,14 @@ export default function PricingPage() {
                 onClick={handleUpgrade}
                 disabled={checkoutLoading}
               >
-                {checkoutLoading ? "Redirecting..." : "Upgrade to Pro"}
+                {checkoutLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="size-4 animate-spin" />
+                    Redirecting...
+                  </span>
+                ) : (
+                  "Upgrade to Pro"
+                )}
               </Button>
             ) : (
               <Button
