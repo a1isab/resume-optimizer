@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe/server";
-import { createAdminClient } from "@/lib/supabase/server";
+import { getStripe } from "../../src/lib/stripe/server";
+import { createAdminClient } from "../../src/lib/supabase/server";
 
 export async function POST(request: Request) {
   const body = await request.text();

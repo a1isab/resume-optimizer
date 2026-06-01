@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/server";
-import { analyzeResume } from "@/lib/ai/gemini";
-import { FREE_SCAN_LIMIT } from "@/lib/constants";
+import { createClient } from "../../src/lib/supabase/server";
+import { createAdminClient } from "../../src/lib/supabase/server";
+import { analyzeResume } from "../../src/lib/ai/gemini";
+import { FREE_SCAN_LIMIT } from "../../src/lib/constants";
 
 export async function POST(request: Request) {
   const supabase = await createClient();

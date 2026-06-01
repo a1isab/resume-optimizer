@@ -3,15 +3,15 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 function getUrl() {
-  return process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  return process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
 }
 
 function getAnonKey() {
-  return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
 }
 
 function getServiceKey() {
-  return process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  return process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-service-role-key";
 }
 
 export async function createClient() {

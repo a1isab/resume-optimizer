@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { FREE_SCAN_LIMIT } from "@/lib/constants";
+import { createClient } from "../../src/lib/supabase/server";
+import { FREE_SCAN_LIMIT } from "../../src/lib/constants";
 
 export async function GET() {
   const supabase = await createClient();
