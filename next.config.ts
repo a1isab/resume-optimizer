@@ -3,10 +3,10 @@ import type { NextConfig } from "next";
 const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Tells Next.js to build static HTML/CSS/JS files
-  basePath: isProd ? '/JobAssistant' : '', // Tells Next.js your repository name
+  output: 'export', 
+  basePath: isProd ? '/resume-optimizer' : '', // <-- Update this to your new repo name
   images: {
-    unoptimized: true, // GitHub Pages doesn't support Next.js dynamic image optimization
+    unoptimized: true, 
   },
 };
 
