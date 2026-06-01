@@ -15,14 +15,32 @@ export async function POST(request: Request) {
   }
 
   const admin = createAdminClient();
-  const { data: profile } = await admin
+  let { data: profile } = await admin
     .from("users")
     .select("*")
     .eq("id", user.id)
     .single();
 
   if (!profile) {
-    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    await admin.from("users").insert({
+      id: user.id,
+      email: user.email ?? "",
+      name: user.user_metadata?.name ?? null,
+      plan: "free",
+      scan_count: 0,
+    });
+
+    const { data: newProfile } = await admin
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (!newProfile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
+    profile = newProfile;
   }
 
   const now = new Date();

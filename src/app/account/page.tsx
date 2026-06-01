@@ -30,27 +30,29 @@ export default function AccountPage() {
         router.push("/auth/login");
         return;
       }
-      const { data } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", user.id)
-        .single();
 
-      if (data) {
-        setProfile(data);
+      const loadProfile = async (retries: number): Promise<void> => {
+        const { data } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+
+        if (data) {
+          setProfile(data);
+          setLoading(false);
+          return;
+        }
+
+        if (retries > 0) {
+          await fetch("/api/user/ensure-profile", { method: "POST" });
+          return loadProfile(retries - 1);
+        }
+
         setLoading(false);
-        return;
-      }
+      };
 
-      const { data: freshData } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-      if (freshData) {
-        setProfile(freshData);
-      }
-      setLoading(false);
+      loadProfile(2);
     });
   }, [supabase, router]);
 
