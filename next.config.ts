@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* You can delete output: 'export' and basePath. 
-     Vercel handles everything automatically from the root domain! */
+  output: 'export', // Required for GitHub Pages
+  basePath: '/resume-optimizer', // Matches your repository name precisely
+  images: {
+    unoptimized: true, // Required because GitHub Pages doesn't support Next.js image optimization
+  },
 };
 
 export default nextConfig;
