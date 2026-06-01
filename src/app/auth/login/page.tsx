@@ -3,27 +3,26 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "../../src/lib/supabase/client";
-import { signupSchema, type SignupValues } from "../../src/lib/validations";
-import { Button } from "../../src/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
+import { loginSchema, type LoginValues } from "@/lib/validations";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../src/components/ui/card";
-import { Input } from "../../src/components/ui/input";
-import { Label } from "../../src/components/ui/label";
-import { APP_NAME } from "../../src/lib/constants";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { APP_NAME } from "@/lib/constants";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const router = useRouter();
   const supabase = createClient();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [values, setValues] = useState<SignupValues>({
-    name: "",
+  const [values, setValues] = useState<LoginValues>({
     email: "",
     password: "",
   });
@@ -32,35 +31,22 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
 
-    const parsed = signupSchema.safeParse(values);
+    const parsed = loginSchema.safeParse(values);
     if (!parsed.success) {
       setError(parsed.error.issues[0].message);
       return;
     }
 
     setLoading(true);
-    const { data: authData, error: authError } =
-      await supabase.auth.signUp({
-        email: values.email,
-        password: values.password,
-        options: { data: { name: values.name } },
-      });
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
 
     if (authError) {
       setError(authError.message);
       setLoading(false);
       return;
-    }
-
-    if (authData.user) {
-      const supabaseAdmin = createClient();
-      await supabaseAdmin.from("users").insert({
-        id: authData.user.id,
-        email: values.email,
-        name: values.name,
-        plan: "free",
-        scan_count: 0,
-      });
     }
 
     router.push("/dashboard");
@@ -71,24 +57,13 @@ export default function SignupPage() {
     <div className="flex flex-1 items-center justify-center px-4 py-20">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
+          <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Start optimizing your resume with {APP_NAME}
+            Log in to {APP_NAME} to continue optimizing your resume
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                placeholder="Your name"
-                value={values.name}
-                onChange={(e) =>
-                  setValues({ ...values, name: e.target.value })
-                }
-              />
-            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -117,16 +92,16 @@ export default function SignupPage() {
               <p className="text-sm text-destructive">{error}</p>
             )}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Try Free"}
+              {loading ? "Logging in..." : "Log in"}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
-              href="/auth/login"
+              href="/auth/signup"
               className="font-medium text-primary hover:underline"
             >
-              Log in
+              Sign up
             </Link>
           </p>
         </CardContent>

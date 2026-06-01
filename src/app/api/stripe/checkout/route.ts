@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "../../src/lib/supabase/server";
-import { getStripe } from "../../src/lib/stripe/server";
-import { PRO_PRICE_ID } from "../../src/lib/constants";
+import { createClient } from "@/lib/supabase/server";
+import { getStripe } from "@/lib/stripe/server";
+import { PRO_PRICE_ID } from "@/lib/constants";
 
 export async function POST() {
   const supabase = await createClient();
