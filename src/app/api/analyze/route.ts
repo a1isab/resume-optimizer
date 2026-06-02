@@ -22,13 +22,20 @@ export async function POST(request: Request) {
     .single();
 
   if (!profile) {
-    await admin.from("users").insert({
+    const { error: insertError } = await admin.from("users").insert({
       id: user.id,
       email: user.email ?? "",
       name: user.user_metadata?.name ?? null,
       plan: "free",
       scan_count: 0,
     });
+
+    if (insertError) {
+      return NextResponse.json(
+        { error: `Failed to create profile: ${insertError.message}` },
+        { status: 500 }
+      );
+    }
 
     const { data: newProfile } = await admin
       .from("users")
@@ -37,7 +44,10 @@ export async function POST(request: Request) {
       .single();
 
     if (!newProfile) {
-      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Profile created but failed to read it back" },
+        { status: 500 }
+      );
     }
 
     profile = newProfile;
