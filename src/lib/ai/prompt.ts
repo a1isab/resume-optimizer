@@ -1,10 +1,5 @@
-export function buildAnalysisPrompt(resumeText: string, jdText: string) {
-  return [
-    {
-      role: "user" as const,
-      parts: [
-        {
-          text: `You are an expert ATS resume coach. Analyze the resume against the job description.
+export function buildAnalysisPrompt(resumeText: string, jdText: string): string {
+  return `You are an expert ATS resume coach. Analyze the resume against the job description.
 
 Resume:
 ${resumeText}
@@ -21,9 +16,5 @@ Respond ONLY with valid JSON. No markdown code fences, no extra text, no comment
     { "original": "the weak bullet from the resume", "rewritten": "your improved version" }
   ],
   "summary": "Two-sentence overall verdict on the match."
-}`,
-        },
-      ],
-    },
-  ];
+}`;
 }

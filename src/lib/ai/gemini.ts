@@ -1,38 +1,44 @@
 import { buildAnalysisPrompt } from "./prompt";
 import type { AnalysisResult } from "@/lib/types";
 
+const ZEN_API_URL = "https://opencode.ai/zen/v1/chat/completions";
+const MODEL = "deepseek-v4-flash-free";
+
 export async function analyzeResume(
   resumeText: string,
   jdText: string
 ): Promise<AnalysisResult> {
-  const apiKey = process.env.GOOGLE_AI_API_KEY;
+  const apiKey = process.env.ZEN_API_KEY;
   if (!apiKey) {
-    throw new Error("GOOGLE_AI_API_KEY is not configured");
+    throw new Error("ZEN_API_KEY is not configured");
   }
 
-  const contents = buildAnalysisPrompt(resumeText, jdText);
+  const promptText = buildAnalysisPrompt(resumeText, jdText);
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents }),
-    }
-  );
+  const response = await fetch(ZEN_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: [{ role: "user", content: promptText }],
+      temperature: 0.3,
+    }),
+  });
 
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`Gemini API error ${response.status}: ${body}`);
+    throw new Error(`Zen API error ${response.status}: ${body}`);
   }
 
   const data = await response.json();
 
-  const rawText =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  const rawText = data?.choices?.[0]?.message?.content ?? "";
 
   if (!rawText) {
-    throw new Error("Gemini returned an empty response");
+    throw new Error("Zen returned an empty response");
   }
 
   return parseResult(rawText);
