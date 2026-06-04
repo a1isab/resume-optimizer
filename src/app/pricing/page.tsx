@@ -248,8 +248,8 @@ export default function PricingPage() {
         <h2 className="mb-6 text-center text-xl font-bold tracking-tight">
           Compare plans
         </h2>
-        <div className="overflow-hidden rounded-lg border border-border/50 glass-card">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-lg border border-border/50 glass-card">
+          <table className="w-full min-w-[320px] text-sm">
             <thead>
               <tr className="border-b border-border/30 bg-muted/20">
                 <th className="px-4 py-3 text-left font-medium">Feature</th>

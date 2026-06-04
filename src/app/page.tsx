@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_TAGLINE } from "@/lib/constants";
 import { ResultsPreview } from "@/components/ResultsPreview";
+import { HowItWorks } from "@/components/HowItWorks";
 import { Testimonials } from "@/components/Testimonials";
 import { Target, Brain, Zap, ArrowRight, Users, Check } from "lucide-react";
 
@@ -58,6 +59,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <HowItWorks />
+
       <section className="mx-auto max-w-4xl px-4 pb-28 animate-fade-in-up duration-700" style={{ animationDelay: "200ms" }}>
         <ResultsPreview />
       </section>
@@ -82,6 +85,36 @@ export default function LandingPage() {
       </section>
 
       <Testimonials />
+
+      {/* Bottom CTA */}
+      <section className="mx-auto max-w-3xl px-4 pb-28">
+        <div
+          className="relative overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] p-8 text-center sm:p-12"
+          style={{ animation: "fade-in-up 0.5s ease-out both" }}
+        >
+          <div className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/5 blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 size-48 rounded-full bg-accent-amber/5 blur-3xl" />
+
+          <h2 className="relative text-2xl font-bold tracking-tight sm:text-3xl">
+            Ready to beat the bots?
+          </h2>
+          <p className="relative mt-3 text-sm text-muted-foreground">
+            Join 500+ job seekers who stopped guessing and started landing interviews.
+          </p>
+          <div className="relative mt-8 flex items-center justify-center gap-4">
+            <Link href="/auth/signup">
+              <Button size="lg" className="text-base gap-2">
+                Try Free <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="/pricing">
+              <Button variant="outline" size="lg" className="text-base">
+                See Pricing
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="mx-auto max-w-4xl px-4 pb-28 animate-fade-in-up duration-700" style={{ animationDelay: "400ms" }}>
         <div className="rounded-lg border border-border/50 p-8 sm:p-12 glass-card transition-all duration-300 hover:border-primary/20 hover:shadow-sm">

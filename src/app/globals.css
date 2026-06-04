@@ -8,6 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -91,11 +92,11 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.6 0.22 300);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.15 0 0);
+  --secondary: oklch(0.16 0.02 70);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.15 0 0);
   --muted-foreground: oklch(0.58 0 0);
-  --accent: oklch(0.15 0 0);
+  --accent: oklch(0.2 0.04 70);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 8%);
@@ -110,7 +111,7 @@
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.6 0.22 300);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
+  --sidebar-accent: oklch(0.2 0.04 70);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.6 0.22 300);
@@ -214,4 +215,36 @@
   html {
     @apply font-sans;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), sans-serif;
+  }
+}
+
+/* ── Amber accent utility ── */
+.text-accent-amber {
+  color: oklch(0.73 0.17 70);
+}
+
+.bg-accent-amber\/10 {
+  background-color: oklch(0.73 0.17 70 / 0.1);
+}
+
+.border-accent-amber\/20 {
+  border-color: oklch(0.73 0.17 70 / 0.2);
+}
+
+/* ── Step number circle for HowItWorks ── */
+.step-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: var(--font-heading), sans-serif;
+  background: oklch(0.6 0.22 300 / 0.15);
+  color: oklch(0.6 0.22 300);
+  flex-shrink: 0;
 }
