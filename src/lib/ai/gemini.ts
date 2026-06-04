@@ -70,7 +70,7 @@ function parseResult(raw: string): AnalysisResult {
       ),
       summary: parsed.summary,
     };
-  } catch (e) {
+  } catch {
     throw new Error(
       `Failed to parse AI response. Please try again.`
     );

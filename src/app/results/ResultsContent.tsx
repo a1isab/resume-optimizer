@@ -20,14 +20,18 @@ export function ResultsContent() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!scanId) {
-      setError("No scan ID provided");
-      setLoading(false);
-      return;
-    }
+    let cancelled = false;
 
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) return;
+    async function load() {
+      if (!scanId) {
+        setError("No scan ID provided");
+        setLoading(false);
+        return;
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (cancelled || !user) { setLoading(false); return; }
+
       const { data } = await supabase
         .from("scans")
         .select("*")
@@ -35,13 +39,17 @@ export function ResultsContent() {
         .eq("user_id", user.id)
         .single();
 
+      if (cancelled) return;
       if (!data) {
         setError("Scan not found");
       } else {
         setScan(data);
       }
       setLoading(false);
-    });
+    }
+
+    load();
+    return () => { cancelled = true; };
   }, [scanId, supabase]);
 
   if (loading) return <AnalysisSkeleton />;

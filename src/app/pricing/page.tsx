@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { APP_NAME, PRO_PRICE } from "@/lib/constants";
+import { PRO_PRICE } from "@/lib/constants";
 import { Check, Loader2 } from "lucide-react";
 
 const freeFeatures = [

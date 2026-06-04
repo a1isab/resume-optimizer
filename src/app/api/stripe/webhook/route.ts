@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
 
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as any;
+    const session = event.data.object as { metadata?: { user_id?: string }; subscription_data?: { metadata?: { user_id?: string } }; customer?: string; subscription?: string };
     const userId = session.metadata?.user_id || session.subscription_data?.metadata?.user_id;
 
     if (userId) {
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   }
 
   if (event.type === "customer.subscription.updated") {
-    const subscription = event.data.object as any;
+    const subscription = event.data.object as { metadata?: { user_id?: string }; status?: string };
     const userId = subscription.metadata?.user_id;
 
     if (userId) {
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
   }
 
   if (event.type === "customer.subscription.deleted") {
-    const subscription = event.data.object as any;
+    const subscription = event.data.object as { metadata?: { user_id?: string } };
     const userId = subscription.metadata?.user_id;
 
     if (userId) {

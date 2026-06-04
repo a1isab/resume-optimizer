@@ -31,7 +31,6 @@ requested task.
 
 ## Memory
 
-- Read `DECISIONS.md` before making architectural changes
 - Read `KNOWN_ISSUES.md` before debugging recurring failures
 - Update `SESSION.md` with current status when work stops mid-task
 - Treat pinned project facts as constraints, not suggestions

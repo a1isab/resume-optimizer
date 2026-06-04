@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
+import { APP_TAGLINE } from "@/lib/constants";
 import { Target, Brain, Zap } from "lucide-react";
 
 const features = [

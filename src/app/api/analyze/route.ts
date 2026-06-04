@@ -89,9 +89,9 @@ export async function POST(request: Request) {
   let result;
   try {
     result = await analyzeResume(resumeText, jobDescription);
-  } catch (e: any) {
+  } catch {
     return NextResponse.json(
-      { error: e.message ?? "AI analysis failed" },
+      { error: "AI analysis failed" },
       { status: 500 }
     );
   }
