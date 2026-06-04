@@ -7,25 +7,46 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
 import type { User } from "@supabase/supabase-js";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Crown } from "lucide-react";
 
 export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const [plan, setPlan] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null);
+    supabase.auth.getUser().then(async ({ data }) => {
+      const u = data.user ?? null;
+      setUser(u);
+      if (u) {
+        const { data: profile } = await supabase
+          .from("users")
+          .select("plan")
+          .eq("id", u.id)
+          .single();
+        setPlan(profile?.plan ?? null);
+      }
       setLoading(false);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setUser(session?.user ?? null);
+      async (_, session) => {
+        const u = session?.user ?? null;
+        setUser(u);
+        if (u) {
+          const { data: profile } = await supabase
+            .from("users")
+            .select("plan")
+            .eq("id", u.id)
+            .single();
+          setPlan(profile?.plan ?? null);
+        } else {
+          setPlan(null);
+        }
       }
     );
 
@@ -45,7 +66,15 @@ export function Navbar() {
           href="/"
           className="text-lg font-semibold tracking-tight text-foreground"
         >
-          {APP_NAME}
+          <span className="flex items-center gap-2">
+            {APP_NAME}
+            {plan === "pro" && (
+              <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                <Crown className="size-3" />
+                Pro
+              </span>
+            )}
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -143,9 +172,15 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="text-sm text-muted-foreground"
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
                 >
                   Dashboard
+                  {plan === "pro" && (
+                    <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                      <Crown className="size-2.5" />
+                      Pro
+                    </span>
+                  )}
                 </Link>
                 <Link
                   href="/account"

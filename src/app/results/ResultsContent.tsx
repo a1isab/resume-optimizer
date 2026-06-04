@@ -10,6 +10,7 @@ import { SummaryCard } from "@/components/SummaryCard";
 import { CopyButton } from "@/components/CopyButton";
 import { AnalysisSkeleton } from "@/components/AnalysisSkeleton";
 import { CriticalNotes } from "@/components/CriticalNotes";
+import { Crown } from "lucide-react";
 import type { Scan } from "@/lib/types";
 
 export function ResultsContent() {
@@ -17,6 +18,7 @@ export function ResultsContent() {
   const scanId = searchParams.get("scanId");
   const supabase = createClient();
   const [scan, setScan] = useState<Scan | null>(null);
+  const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -33,12 +35,21 @@ export function ResultsContent() {
       const { data: { user } } = await supabase.auth.getUser();
       if (cancelled || !user) { setLoading(false); return; }
 
-      const { data } = await supabase
-        .from("scans")
-        .select("*")
-        .eq("id", scanId)
-        .eq("user_id", user.id)
-        .single();
+      const [{ data }, { data: profile }] = await Promise.all([
+        supabase
+          .from("scans")
+          .select("*")
+          .eq("id", scanId)
+          .eq("user_id", user.id)
+          .single(),
+        supabase
+          .from("users")
+          .select("plan")
+          .eq("id", user.id)
+          .single(),
+      ]);
+
+      if (profile?.plan === "pro") setIsPro(true);
 
       if (cancelled) return;
       if (!data) {
@@ -73,7 +84,15 @@ export function ResultsContent() {
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-10">
       <div className="animate-fade-in-up stagger-1">
-        <h1 className="text-2xl font-bold tracking-tight">Results</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold tracking-tight">Results</h1>
+          {isPro && (
+            <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+              <Crown className="size-3" />
+              Pro
+            </span>
+          )}
+        </div>
       </div>
 
       {scan.job_title && (

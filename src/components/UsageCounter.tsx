@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Progress } from "@/components/ui/progress";
 import { FREE_SCAN_LIMIT } from "@/lib/constants";
+import { Crown } from "lucide-react";
 
 export function UsageCounter() {
   const supabase = createClient();
@@ -30,8 +31,10 @@ export function UsageCounter() {
   if (loading) return null;
   if (plan === "pro") {
     return (
-      <div className="rounded-md border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary">
-        Pro plan &mdash; unlimited scans
+      <div className="flex items-center gap-2 rounded-md border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 px-4 py-3 text-sm text-primary shadow-sm">
+        <Crown className="size-4 shrink-0" />
+        <span className="font-medium">Pro</span>
+        <span className="text-primary/70">&mdash; unlimited scans</span>
       </div>
     );
   }

@@ -7,7 +7,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { FileText, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, ArrowRight, Sparkles, Crown } from "lucide-react";
 
 interface ScanRow {
   id: string;
@@ -46,20 +46,36 @@ export default async function DashboardPage() {
     redirect("/auth/login");
   }
 
-  const { data: scans } = await supabase
-    .from("scans")
-    .select("id, job_title, ats_score, created_at")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-    .limit(50);
+  const [{ data: scans }, { data: profile }] = await Promise.all([
+    supabase
+      .from("scans")
+      .select("id, job_title, ats_score, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(50),
+    supabase
+      .from("users")
+      .select("plan")
+      .eq("id", user.id)
+      .single(),
+  ]);
 
   const hasScans = scans && scans.length > 0;
+  const isPro = profile?.plan === "pro";
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-10">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+            {isPro && (
+              <span className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                <Crown className="size-3.5" />
+                Pro
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {hasScans
               ? `You have ${scans.length} scan${scans.length === 1 ? "" : "s"} on record`
