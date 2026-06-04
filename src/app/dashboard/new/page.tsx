@@ -15,7 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileUpload } from "@/components/FileUpload";
 import { UsageCounter } from "@/components/UsageCounter";
-import { Upload, FileText, Search, Loader2, X, Check } from "lucide-react";
+import { Upload, FileText, Search, X, Check } from "lucide-react";
 
 const JOB_TITLES = [
   "Software Engineer",
@@ -63,12 +63,9 @@ export default function NewScanPage() {
   const router = useRouter();
   const supabase = createClient();
   const [resumeText, setResumeText] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [generatingJd, setGeneratingJd] = useState(false);
-  const [jdGeneratedFor, setJdGeneratedFor] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
@@ -87,33 +84,11 @@ export default function NewScanPage() {
     t.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSelectTitle = async (title: string) => {
+  const handleSelectTitle = (title: string) => {
     setJobTitle(title);
     setSearchQuery(title);
     setSearchOpen(false);
     setError("");
-
-    if (title === jdGeneratedFor) return;
-
-    setGeneratingJd(true);
-    try {
-      const res = await fetch("/api/generate-jd", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
-      });
-      const data = await res.json();
-      if (res.ok && data.jobDescription) {
-        setJobDescription(data.jobDescription);
-        setJdGeneratedFor(title);
-      } else {
-        setError(data.error ?? "Failed to generate job description");
-      }
-    } catch {
-      setError("Failed to generate job description. Please paste one manually.");
-    } finally {
-      setGeneratingJd(false);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -123,8 +98,8 @@ export default function NewScanPage() {
       setError("Resume must be at least 50 characters");
       return;
     }
-    if (jobDescription.length < 50) {
-      setError("Job description must be at least 50 characters");
+    if (!jobTitle) {
+      setError("Please select a job title");
       return;
     }
 
@@ -143,8 +118,7 @@ export default function NewScanPage() {
         },
         body: JSON.stringify({
           resumeText,
-          jobDescription,
-          jobTitle: jobTitle || null,
+          jobTitle,
         }),
       });
 
@@ -245,7 +219,6 @@ export default function NewScanPage() {
                     onClick={() => {
                       setSearchQuery("");
                       setJobTitle("");
-                      setJdGeneratedFor("");
                     }}
                   >
                     <X className="size-4" />
@@ -285,42 +258,11 @@ export default function NewScanPage() {
           </CardContent>
         </Card>
 
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FileText className="size-4" />
-              Job Description
-            </CardTitle>
-            <CardDescription>
-              {generatingJd
-                ? "Generating job description..."
-                : jdGeneratedFor
-                  ? `Auto-generated for ${jdGeneratedFor} — you can edit below`
-                  : "Edit the auto-generated description or paste your own"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {generatingJd ? (
-              <div className="flex min-h-40 items-center justify-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="size-4 animate-spin" />
-                Generating realistic job description...
-              </div>
-            ) : (
-              <Textarea
-                placeholder="Paste the full job description here..."
-                className="min-h-40"
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-              />
-            )}
-          </CardContent>
-        </Card>
-
         {error && (
           <p className="text-sm text-destructive">{error}</p>
         )}
 
-        <Button type="submit" size="lg" className="w-full" disabled={loading || generatingJd}>
+        <Button type="submit" size="lg" className="w-full" disabled={loading}>
           {loading ? "Analyzing..." : "Analyze Match"}
         </Button>
       </form>

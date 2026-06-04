@@ -74,14 +74,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const { resumeText, jobDescription, jobTitle } = await request.json();
+  const body = await request.json();
+  const { resumeText, jobTitle } = body;
+  let { jobDescription } = body;
 
-  if (
-    typeof resumeText !== "string" ||
-    typeof jobDescription !== "string"
-  ) {
+  if (typeof resumeText !== "string") {
     return NextResponse.json(
-      { error: "resumeText and jobDescription are required" },
+      { error: "resumeText is required" },
       { status: 400 }
     );
   }
@@ -89,6 +88,57 @@ export async function POST(request: Request) {
   const title = typeof jobTitle === "string" && jobTitle.trim().length > 0
     ? jobTitle.trim()
     : null;
+
+  if (!title && typeof jobDescription !== "string") {
+    return NextResponse.json(
+      { error: "A job title or job description is required" },
+      { status: 400 }
+    );
+  }
+
+  if (title && typeof jobDescription !== "string") {
+    try {
+      const zenRes = await fetch("https://opencode.ai/zen/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.ZEN_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "deepseek-v4-flash-free",
+          messages: [
+            {
+              role: "user",
+              content: `Generate a realistic, detailed job description for a "${title}" position. Include a brief company context, 5-7 key responsibilities, 4-6 required qualifications, and 2-3 nice-to-haves. Make it specific to the ${title} role. Write 300-500 words. Return ONLY the job description text.`,
+            },
+          ],
+          temperature: 0.5,
+        }),
+      });
+
+      if (!zenRes.ok) {
+        return NextResponse.json(
+          { error: "Failed to generate job description from AI" },
+          { status: 502 }
+        );
+      }
+
+      const zenData = await zenRes.json();
+      const generatedJd = zenData?.choices?.[0]?.message?.content ?? "";
+
+      if (!generatedJd) {
+        return NextResponse.json(
+          { error: "AI returned an empty job description" },
+          { status: 502 }
+        );
+      }
+
+      jobDescription = generatedJd;
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Failed to generate job description";
+      return NextResponse.json({ error: message }, { status: 500 });
+    }
+  }
 
   let result;
   try {
