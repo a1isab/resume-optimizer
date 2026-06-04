@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
     if (userId) {
       const subscription = await stripe.subscriptions.retrieve(
-        session.subscription
+        session.subscription!
       );
 
       await admin

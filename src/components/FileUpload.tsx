@@ -40,7 +40,7 @@ export function FileUpload({
           const page = await pdf.getPage(i);
           const content = await page.getTextContent();
           text +=
-            content.items.map((item: { str: string }) => item.str).join(" ") + "\n";
+            content.items.map((item) => (item as { str: string }).str).join(" ") + "\n";
         }
 
         if (text.trim().length < 50) {
