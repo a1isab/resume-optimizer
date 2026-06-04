@@ -16,11 +16,12 @@ export function KeywordBadges({ matched, missing }: KeywordBadgesProps) {
           {matched.length === 0 && (
             <p className="text-sm text-muted-foreground">None found</p>
           )}
-          {matched.map((kw) => (
+          {matched.map((kw, i) => (
             <Badge
               key={kw}
               variant="outline"
-              className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+              className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400 animate-fade-in-up"
+              style={{ animationDelay: `${i * 40}ms` }}
             >
               {kw}
             </Badge>
@@ -35,11 +36,12 @@ export function KeywordBadges({ matched, missing }: KeywordBadgesProps) {
           {missing.length === 0 && (
             <p className="text-sm text-muted-foreground">None found</p>
           )}
-          {missing.map((kw) => (
+          {missing.map((kw, i) => (
             <Badge
               key={kw}
               variant="outline"
-              className="border-red-500/30 bg-red-500/10 text-red-400"
+              className="border-red-500/30 bg-red-500/10 text-red-400 animate-fade-in-up"
+              style={{ animationDelay: `${(matched.length + i) * 40}ms` }}
             >
               {kw}
             </Badge>

@@ -16,6 +16,7 @@ export interface UserProfile {
 export interface WeakBullet {
   original: string;
   rewritten: string;
+  why_weak: string;
 }
 
 export interface AnalysisResult {
@@ -24,6 +25,7 @@ export interface AnalysisResult {
   missing_keywords: string[];
   weak_bullets: WeakBullet[];
   summary: string;
+  critical_notes: string[];
 }
 
 export interface Scan {
@@ -31,10 +33,12 @@ export interface Scan {
   user_id: string;
   resume_text: string;
   job_description: string;
+  job_title: string | null;
   ats_score: number | null;
   matched_keywords: string[] | null;
   missing_keywords: string[] | null;
   weak_bullets: WeakBullet[] | null;
   summary: string | null;
+  critical_notes: string[] | null;
   created_at: string;
 }

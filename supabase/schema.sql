@@ -28,11 +28,13 @@ create table if not exists public.scans (
   user_id uuid not null references public.users(id) on delete cascade,
   resume_text text not null,
   job_description text not null,
+  job_title text,
   ats_score int,
   matched_keywords jsonb,
   missing_keywords jsonb,
   weak_bullets jsonb,
   summary text,
+  critical_notes jsonb,
   created_at timestamptz not null default now()
 );
 

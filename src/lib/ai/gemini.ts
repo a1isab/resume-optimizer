@@ -69,12 +69,16 @@ function parseResult(raw: string): AnalysisResult {
       matched_keywords: parsed.matched_keywords,
       missing_keywords: parsed.missing_keywords,
       weak_bullets: parsed.weak_bullets.map(
-        (b: { original?: string; rewritten?: string }) => ({
+        (b: { original?: string; rewritten?: string; why_weak?: string }) => ({
           original: b.original ?? "",
           rewritten: b.rewritten ?? "",
+          why_weak: b.why_weak ?? "",
         })
       ),
       summary: parsed.summary,
+      critical_notes: Array.isArray(parsed.critical_notes)
+        ? parsed.critical_notes
+        : [],
     };
   } catch {
     throw new Error(

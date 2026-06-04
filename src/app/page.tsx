@@ -27,7 +27,7 @@ const features = [
 export default function LandingPage() {
   return (
     <>
-      <section className="flex flex-col items-center justify-center px-4 py-28 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <section className="flex flex-col items-center justify-center px-4 py-28 text-center animate-fade-in-up duration-700">
         <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           {APP_TAGLINE}
         </h1>
@@ -53,10 +53,9 @@ export default function LandingPage() {
         {features.map((f, i) => (
           <div
             key={f.title}
-            className="group rounded-lg border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-sm hover:-translate-y-0.5"
+            className="group rounded-lg border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-sm hover:-translate-y-0.5 glass-card"
             style={{
-              animation: `fade-in 0.5s ease-out ${i * 0.15}s both`,
-              viewTimelineName: i > 0 ? "--reveal" : undefined,
+              animation: `fade-in-up 0.5s ease-out ${i * 0.15}s both`,
             }}
           >
             <div className="mb-3 flex size-10 items-center justify-center rounded-md bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
@@ -68,8 +67,8 @@ export default function LandingPage() {
         ))}
       </section>
 
-      <section className="mx-auto max-w-4xl px-4 pb-28 animate-in fade-in duration-700 delay-300">
-        <div className="rounded-lg border border-border/50 p-8 sm:p-12 transition-all duration-300 hover:border-primary/20 hover:shadow-sm">
+      <section className="mx-auto max-w-4xl px-4 pb-28 animate-fade-in-up duration-700" style={{ animationDelay: "400ms" }}>
+        <div className="rounded-lg border border-border/50 p-8 sm:p-12 glass-card transition-all duration-300 hover:border-primary/20 hover:shadow-sm">
           <h2 className="text-2xl font-bold tracking-tight">
             Simple pricing
           </h2>
@@ -77,7 +76,7 @@ export default function LandingPage() {
             Start free. Upgrade when you&apos;re serious about landing the role.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="rounded-lg border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="rounded-lg border border-border/50 p-6 glass-card transition-all duration-300 hover:border-primary/30 hover:shadow-sm hover:-translate-y-0.5">
               <h3 className="font-semibold">Free</h3>
               <p className="mt-1 text-3xl font-bold">$0</p>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -92,7 +91,7 @@ export default function LandingPage() {
                 <Button className="mt-6 w-full">Get Started</Button>
               </Link>
             </div>
-            <div className="rounded-lg border border-primary/30 bg-primary/5 p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="rounded-lg border border-primary/30 bg-primary/[0.04] p-6 glass-card transition-all duration-300 hover:border-primary/50 hover:shadow-sm hover:-translate-y-0.5">
               <h3 className="font-semibold">Pro</h3>
               <p className="mt-1 text-3xl font-bold">$12</p>
               <p className="mt-1 text-sm text-muted-foreground">

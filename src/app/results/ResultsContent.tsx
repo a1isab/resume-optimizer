@@ -9,6 +9,7 @@ import { BulletRewrites } from "@/components/BulletRewrites";
 import { SummaryCard } from "@/components/SummaryCard";
 import { CopyButton } from "@/components/CopyButton";
 import { AnalysisSkeleton } from "@/components/AnalysisSkeleton";
+import { CriticalNotes } from "@/components/CriticalNotes";
 import type { Scan } from "@/lib/types";
 
 export function ResultsContent() {
@@ -66,26 +67,49 @@ export function ResultsContent() {
     matched: (scan.matched_keywords as string[]) ?? [],
     missing: (scan.missing_keywords as string[]) ?? [],
   };
-  const bullets = (scan.weak_bullets as { original: string; rewritten: string }[]) ?? [];
+  const bullets = (scan.weak_bullets as { original: string; rewritten: string; why_weak: string }[]) ?? [];
+  const criticalNotes = (scan.critical_notes as string[]) ?? [];
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-10">
-      <h1 className="text-2xl font-bold tracking-tight">Results</h1>
+      <div className="animate-fade-in-up stagger-1">
+        <h1 className="text-2xl font-bold tracking-tight">Results</h1>
+      </div>
 
-      <SummaryCard summary={scan.summary ?? ""} />
+      {scan.job_title && (
+        <div className="animate-fade-in-up stagger-2">
+          <p className="text-sm text-muted-foreground -mt-4">
+            Analysis for <span className="font-medium text-foreground">{scan.job_title}</span>
+          </p>
+        </div>
+      )}
 
-      <div className="flex justify-center py-4">
+      <div className="animate-fade-in-up stagger-2">
+        <CriticalNotes notes={criticalNotes} />
+      </div>
+
+      <div className="animate-fade-in-up stagger-3">
+        <SummaryCard summary={scan.summary ?? ""} />
+      </div>
+
+      <div className="flex justify-center py-4 animate-scale-in stagger-4">
         <ScoreRing score={scan.ats_score ?? 0} />
       </div>
 
-      <KeywordBadges
-        matched={keywords.matched}
-        missing={keywords.missing}
-      />
+      <div className="animate-fade-in-up stagger-5">
+        <KeywordBadges
+          matched={keywords.matched}
+          missing={keywords.missing}
+        />
+      </div>
 
-      <BulletRewrites bullets={bullets} />
+      <div className="animate-fade-in-up stagger-6">
+        <BulletRewrites bullets={bullets} />
+      </div>
 
-      <CopyButton bullets={bullets} />
+      <div className="animate-fade-in-up stagger-7">
+        <CopyButton bullets={bullets} />
+      </div>
     </div>
   );
 }

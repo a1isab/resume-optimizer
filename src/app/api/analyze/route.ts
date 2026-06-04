@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { resumeText, jobDescription } = await request.json();
+  const { resumeText, jobDescription, jobTitle } = await request.json();
 
   if (
     typeof resumeText !== "string" ||
@@ -85,6 +85,10 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
+
+  const title = typeof jobTitle === "string" && jobTitle.trim().length > 0
+    ? jobTitle.trim()
+    : null;
 
   let result;
   try {
@@ -97,20 +101,29 @@ export async function POST(request: Request) {
     );
   }
 
-  const { data: scan } = await admin
+  const { data: scan, error: scanInsertError } = await admin
     .from("scans")
     .insert({
       user_id: user.id,
       resume_text: resumeText,
       job_description: jobDescription,
+      job_title: title,
       ats_score: result.ats_score,
       matched_keywords: result.matched_keywords,
       missing_keywords: result.missing_keywords,
       weak_bullets: result.weak_bullets,
       summary: result.summary,
+      critical_notes: result.critical_notes,
     })
     .select("id")
     .single();
+
+  if (scanInsertError || !scan) {
+    return NextResponse.json(
+      { error: `Failed to save scan: ${scanInsertError?.message ?? "unknown error"}` },
+      { status: 500 }
+    );
+  }
 
   await admin
     .from("users")
@@ -120,5 +133,5 @@ export async function POST(request: Request) {
     })
     .eq("id", user.id);
 
-  return NextResponse.json({ scanId: scan?.id });
+  return NextResponse.json({ scanId: scan.id });
 }

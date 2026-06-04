@@ -17,7 +17,7 @@ export function ScoreRing({ score, size = 180 }: ScoreRingProps) {
 
   return (
     <div
-      className="relative inline-flex items-center justify-center"
+      className={`relative inline-flex items-center justify-center animate-glow-pulse ${getColor(score)}`}
       style={{ width: size, height: size }}
     >
       <svg width={size} height={size} className="-rotate-90">
@@ -29,7 +29,7 @@ export function ScoreRing({ score, size = 180 }: ScoreRingProps) {
           stroke="currentColor"
           strokeWidth={strokeWidth}
           className="text-muted"
-          opacity={0.3}
+          opacity={0.15}
         />
         <circle
           cx={size / 2}
@@ -41,7 +41,7 @@ export function ScoreRing({ score, size = 180 }: ScoreRingProps) {
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           className={getColor(score)}
-          style={{ transition: "stroke-dashoffset 0.6s ease" }}
+          style={{ transition: "stroke-dashoffset 0.8s ease-out" }}
         />
       </svg>
       <div className="absolute flex flex-col items-center">

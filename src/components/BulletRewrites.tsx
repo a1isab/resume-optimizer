@@ -16,7 +16,19 @@ export function BulletRewrites({ bullets }: BulletRewritesProps) {
     <div className="space-y-4">
       <h3 className="text-sm font-semibold">Rewritten Bullets</h3>
       {bullets.map((b, i) => (
-        <Card key={i} className="overflow-hidden">
+        <Card
+          key={i}
+          className="overflow-hidden glass-card animate-fade-in-up"
+          style={{ animationDelay: `${i * 60}ms` }}
+        >
+          {b.why_weak && (
+            <div className="border-b border-border/50 bg-muted/30 px-4 py-1.5">
+              <p className="text-xs text-muted-foreground">
+                <span className="font-medium text-amber-400">Why weak:</span>{" "}
+                {b.why_weak}
+              </p>
+            </div>
+          )}
           <CardContent className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2">
             <div>
               <p className="mb-1 text-xs font-medium text-muted-foreground">
