@@ -198,7 +198,7 @@ export default function NewScanPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div ref={searchRef} className="relative">
+            <div ref={searchRef}>
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -227,7 +227,7 @@ export default function NewScanPage() {
               </div>
 
               {searchOpen && filteredTitles.length > 0 && (
-                <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-border bg-popover p-1 shadow-lg">
+                <div className="mt-1 max-h-60 overflow-auto rounded-md border border-border bg-popover p-1 shadow-lg">
                   {filteredTitles.map((title) => (
                     <button
                       key={title}
@@ -250,7 +250,7 @@ export default function NewScanPage() {
               )}
 
               {searchOpen && searchQuery && filteredTitles.length === 0 && (
-                <div className="absolute z-50 mt-1 w-full rounded-md border border-border bg-popover p-3 text-center text-sm text-muted-foreground shadow-lg">
+                <div className="mt-1 w-full rounded-md border border-border bg-popover p-3 text-center text-sm text-muted-foreground shadow-lg">
                   No matching titles found
                 </div>
               )}
