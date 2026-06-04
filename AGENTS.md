@@ -1,35 +1,43 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# AGENTS.md
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+## Goal
 
-# Resume Optimizer
+Help with this repository by making the smallest correct change that solves the
+requested task.
 
-## Commands
-- `npm run dev` — dev server (localhost:3000)
-- `npm run build` — production build
-- `npm run lint` — ESLint v9 (flat config at `eslint.config.mjs`)
-- No test framework is installed. Do not run `npm test`.
+## Defaults
 
-## Key conventions
-- `@/` path alias maps to `src/`.
-- All Supabase DB writes in API route handlers must use `createAdminClient()` (service role). Browser/server clients are read-only for DB.
-- Zod schemas imported from `zod/v4`, not `zod`.
-- Dark mode only: `<html className="dark">` is hardcoded in the root layout.
-- shadcn/ui style is `base-nova` (not the default `new-york`).
-- Tailwind v4 via `@tailwindcss/postcss` (no `tailwind.config` file).
-- PDF parsing: dynamic `import("pdfjs-dist")` on the client side only.
+- Stay within the requested scope
+- Prefer the simplest working fix over broad rewrites
+- Match existing code style and project structure
+- Do not edit unrelated files just because they could be improved
+- Ask before destructive or irreversible actions
+- Do not claim tests passed unless you actually ran them
+- Do not invent requirements, endpoints, configs, or results
 
-## Env requirements (`.env.local`)
-Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GOOGLE_AI_API_KEY`. Stripe keys needed for billing features.
+## Working style
 
-## Architecture
-- `src/app/` — App Router pages and API route handlers
-- `src/app/api/` — REST endpoints (analyze, stripe/*, user/*)
-- `src/components/` — React components; shadcn/ui primitives in `components/ui/`
-- `src/lib/` — shared logic (supabase/, ai/, stripe/, types, validations, constants)
-- `supabase/schema.sql` — DB schema with RLS policies
-- `middleware.ts` — refreshes Supabase session, redirects unauthenticated users on `PROTECTED_ROUTES` [/dashboard, /results, /account]
-- `skills-lock.json` — records which agent skills are loaded
-- `AGENTS.md` is referenced by `CLAUDE.md` via `@AGENTS.md`.
+- Restate the task briefly before major edits
+- Surface assumptions when they affect behavior
+- Show what changed and why
+- Keep diffs easy to review
+- Stop and ask if the task expands into a refactor or redesign
+
+## Uncertainty
+
+- Flag low-confidence conclusions explicitly
+- Prefer "I need to verify X" over guessing
+- When there are multiple reasonable paths, present the trade-off
+
+## Memory
+
+- Read `DECISIONS.md` before making architectural changes
+- Read `KNOWN_ISSUES.md` before debugging recurring failures
+- Update `SESSION.md` with current status when work stops mid-task
+- Treat pinned project facts as constraints, not suggestions
+
+## Guardrails
+
+- Never hide uncertainty behind polished wording
+- Never change public contracts without calling it out
+- Never mix requested work with opportunistic cleanup unless asked
